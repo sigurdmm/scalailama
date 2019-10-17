@@ -1,4 +1,5 @@
 import exceptions._
+
 import scala.collection.mutable
 
 object TransactionStatus extends Enumeration {
@@ -6,25 +7,26 @@ object TransactionStatus extends Enumeration {
 }
 
 class TransactionQueue {
+    private val transactions: mutable.Queue[Transaction] = new mutable.Queue()
 
     // TODO
     // project task 1.1
     // Add datastructure to contain the transactions
 
     // Remove and return the first element from the queue
-    def pop: Transaction = ???
+    def pop: Transaction = transactions.dequeue
 
     // Return whether the queue is empty
-    def isEmpty: Boolean = ???
+    def isEmpty: Boolean = transactions.isEmpty
 
     // Add new element to the back of the queue
-    def push(t: Transaction): Unit = ???
+    def push(t: Transaction): Unit = transactions.enqueue(t)
 
     // Return the first element from the queue without removing it
-    def peek: Transaction = ???
+    def peek: Transaction = transactions.front
 
     // Return an iterator to allow you to iterate over the queue
-    def iterator: Iterator[Transaction] = ???
+    def iterator: Iterator[Transaction] = transactions.toIterator
 }
 
 class Transaction(val transactionsQueue: TransactionQueue,

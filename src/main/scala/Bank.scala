@@ -35,8 +35,8 @@ class Bank(val allowedAttempts: Integer = 3) {
 
                 transactionStatus match {
                     case TransactionStatus.PENDING => processPendingTransaction(transaction)
-                    case TransactionStatus.SUCCESS => addTransactionToProcessedTransactions(transaction)
-                    case TransactionStatus.FAILED => addTransactionToProcessedTransactions(transcation)
+                    case TransactionStatus.SUCCESS => pushToCompleted(transaction)
+                    case TransactionStatus.FAILED => pushToCompleted(transcation)
                 }
             }
         }

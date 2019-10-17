@@ -35,8 +35,8 @@ class Bank(val allowedAttempts: Integer = 3) {
 
                 transactionStatus match {
                     case TransactionStatus.PENDING => processPendingTransaction(transaction)
-                    case TransactionStatus.SUCCESS => processSuccededTransaction(transaction)
-                    case TransactionStatus.FAILED => processFailedTransaction(transcation)
+                    case TransactionStatus.SUCCESS => addTransactionToProcessedTransactions(transaction)
+                    case TransactionStatus.FAILED => addTransactionToProcessedTransactions(transcation)
                 }
             }
         }
@@ -49,20 +49,13 @@ class Bank(val allowedAttempts: Integer = 3) {
         processTransactions()
     }
 
-    private def processSuccededTransaction(transaction: Transaction) {
+    private def addTransactionToProcessedTransactions(transaction: Transaction) {
         processedTransactions.push(transaction)
     }
 
-    private def processFailedTransaction(transcation: Transaction) {
-        processedTransactions.push(transcation)
-    }
+    def addAccount(initialBalance: Double) = new Account(this, initialBalance)
 
-    def addAccount(initialBalance: Double): Account = {
-        new Account(this, initialBalance)
-    }
-
-    def getProcessedTransactionsAsList: List[Transaction] = {
-        processedTransactions.iterator.toList
-    }
+    def getProcessedTransactionsAsList = processedTransactions.iterator.toList
+    
 
 }

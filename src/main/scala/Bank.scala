@@ -49,7 +49,7 @@ class Bank(val allowedAttempts: Integer = 3) {
         processTransactions()
     }
 
-    private def addTransactionToProcessedTransactions(transaction: Transaction) {
+    private def pushToCompleted(transaction: Transaction) {
         processedTransactions.push(transaction)
     }
 

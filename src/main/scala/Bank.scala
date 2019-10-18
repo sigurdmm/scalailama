@@ -1,5 +1,4 @@
 class Bank(val allowedAttempts: Integer = 3) {
-
     private val transactionsQueue: TransactionQueue = new TransactionQueue()
     private val processedTransactions: TransactionQueue = new TransactionQueue()
 
@@ -8,12 +7,13 @@ class Bank(val allowedAttempts: Integer = 3) {
     // create a new transaction object and put it in the queue
     // spawn a thread that calls processTransactions
     def addTransactionToQueue(from: Account, to: Account, amount: Double): Unit = {
-        val transcation = new Transaction(transactionsQueue, processedTransactions, from, to, amount, allowedAttempts)
-        trancationsQueue.push(transaction)
+        val transaction = new Transaction(transactionsQueue, processedTransactions, from, to, amount, allowedAttempts)
+
+        transactionsQueue.push(transaction)
 
         val thread = new Thread {
-            override def run {
-                processedTransactions()
+            override def run() {
+                processedTransactions
             }
         }
 
@@ -27,26 +27,15 @@ class Bank(val allowedAttempts: Integer = 3) {
     // Finally do the appropriate thing, depending on whether
     // the transaction succeeded or not
     private def processTransactions: Unit = {
-        val transaction = transactionsQueue.pop()
+        val transaction = transactionsQueue.pop
 
-        val thread = new Thread {
-            override def run {
-                val transactionStatus = transcation.run()
-
-                transactionStatus match {
-                    case TransactionStatus.PENDING => processPendingTransaction(transaction)
-                    case TransactionStatus.SUCCESS => pushToCompleted(transaction)
-                    case TransactionStatus.FAILED => pushToCompleted(transcation)
-                }
-            }
-        }
-
+        val thread = new Thread(transaction)
         thread.start()
     }
 
     private def processPendingTransaction(transaction: Transaction) {
         transactionsQueue.push(transaction)
-        processTransactions()
+        processTransactions
     }
 
     private def pushToCompleted(transaction: Transaction) {

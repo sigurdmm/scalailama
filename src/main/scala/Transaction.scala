@@ -1,32 +1,39 @@
-import exceptions._
+import java.util.concurrent.{BlockingQueue, LinkedBlockingQueue}
+import collection.JavaConverters.asScalaIterator
 
-import scala.collection.mutable
+//sealed trait TransactionStatus
+//case object SUCCESS extends TransactionStatus
+//case object PENDING extends TransactionStatus
+//case object FAILED extends TransactionStatus
 
 object TransactionStatus extends Enumeration {
   val SUCCESS, PENDING, FAILED = Value
 }
 
 class TransactionQueue {
-    private val transactions: mutable.Queue[Transaction] = new mutable.Queue()
+    /**
+     * Use BlockingQueue to be thread-safe
+     * */
+    private val transactions: BlockingQueue[Transaction] = new LinkedBlockingQueue()
 
     // TODO
     // project task 1.1
     // Add datastructure to contain the transactions
 
     // Remove and return the first element from the queue
-    def pop: Transaction = transactions.dequeue
+    def pop: Transaction = transactions.take()
 
     // Return whether the queue is empty
     def isEmpty: Boolean = transactions.isEmpty
 
     // Add new element to the back of the queue
-    def push(t: Transaction): Unit = transactions.enqueue(t)
+    def push(t: Transaction): Unit = transactions.put(t)
 
     // Return the first element from the queue without removing it
-    def peek: Transaction = transactions.front
+    def peek: Transaction = transactions.peek()
 
     // Return an iterator to allow you to iterate over the queue
-    def iterator: Iterator[Transaction] = transactions.toIterator
+    def iterator: Iterator[Transaction] = asScalaIterator(transactions.iterator())
 }
 
 class Transaction(val transactionsQueue: TransactionQueue,

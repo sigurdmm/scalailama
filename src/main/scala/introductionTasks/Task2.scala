@@ -1,5 +1,7 @@
 package introductionTasks
 
+import java.util.concurrent.atomic.AtomicInteger
+
 object Task2 {
     def main(args: Array[String]) = {
 
@@ -28,10 +30,10 @@ object Task2 {
 
     }
 
-    // Task 2b)
-    private var counter: Int = 0
+    // Task 2b), task 2c)
+    private var counter: AtomicInteger = new AtomicInteger(0)
     def increaseCounter(): Unit = {
-        counter += 1
+        counter.set(counter.incrementAndGet())
     }
 
     def printCounter(): Unit = {

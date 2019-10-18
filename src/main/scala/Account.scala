@@ -9,11 +9,20 @@ class Account(val bank: Bank, initialBalance: Double) {
     // TODO
     // for project task 1.2: implement functions
     // for project task 1.3: change return type and update function bodies
-    def withdraw(amount: Double): Unit = ???
-    def deposit (amount: Double): Unit = ???
-    def getBalanceAmount: Double       = ???
+    def withdraw(amount: Double) {
+        // See Synchronization, https://twitter.github.io/scala_school/concurrency.html
+        balance.synchronized {
+            balance.amount -= amount
+        }
+    }
+    def deposit (amount: Double) {
+        balance.synchronized {
+            balance.amount += amount
+        }
+    }
+    def getBalanceAmount: Double = balance.amount
 
-    def transferTo(account: Account, amount: Double) = {
+    def transferTo(account: Account, amount: Double) {
         bank addTransactionToQueue (this, account, amount)
     }
 

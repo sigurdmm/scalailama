@@ -3,17 +3,38 @@ package introductionTasks
 object Task2 {
     def main(args: Array[String]) = {
 
+        // Task 2a)
         def asThread(fun: () => Unit):Thread = new Thread{
                 override def run(): Unit = fun()
         }
 
-//        val thread = initThreadWithFunction(
-//            () => {
-//                Thread.sleep(2000)
-//                println("hei")
-//            }
-//        )
-//        thread.start()
-//        println()
+        val thread = asThread(
+            () => {
+                Thread.sleep(2000)
+                println("Thread is done")
+            }
+        )
+        thread.start()
+        println("Main is done")
+
+        // Task 2b)
+        val thread1 = asThread(() => increaseCounter())
+        val thread2 = asThread(() => increaseCounter())
+        val thread3 = asThread(() => printCounter())
+
+        thread1.start()
+        thread2.start()
+        thread3.start()
+
+    }
+
+    // Task 2b)
+    private var counter: Int = 0
+    def increaseCounter(): Unit = {
+        counter += 1
+    }
+
+    def printCounter(): Unit = {
+        println(counter)
     }
 }

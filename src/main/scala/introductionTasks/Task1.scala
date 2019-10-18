@@ -1,9 +1,5 @@
 package introductionTasks
 
-import java.util
-
-import scala.annotation.tailrec
-
 object Task1 {
   def main(args: Array[String]) {
     val range = generateRange(1, 50);
@@ -14,19 +10,15 @@ object Task1 {
 
     println()
 
-    val sum1b = sumIteratively(range)
     println("Task1b")
-    println("Iteratively calculated sum of array from task 1a: %d".format(sum1b))
+    println("Iteratively calculated sum of array from task 1a: %d".format(sumIteratively(range)))
 
     println()
 
-    val sum1c = sumRecursively(range)
     println("Task1c")
-    println("Recursively calculated sum of array from task 1a: %d".format(sum1c))
+    println("Recursively calculated sum of array from task 1a: %d".format(sumRecursively(range)))
 
     println()
-
-    assert(sum1b == sum1c)
 
     val n = 10
     val nthFib = nthFibonacci(n)
@@ -66,7 +58,6 @@ object Task1 {
   }
 
   // TODO: Answer theory question: Use BigInt instead of Int. What is the difference between these two data types?
-
   def nthFibonacci(n: BigInt): BigInt = {
     @scala.annotation.tailrec
     def nthFibonacciInternal(n: BigInt, a: BigInt, b: BigInt):BigInt = {

@@ -33,7 +33,7 @@ object Task2 {
     // Task 2b), task 2c)
     private var counter: AtomicInteger = new AtomicInteger(0)
     def increaseCounter(): Unit = {
-        counter.set(counter.incrementAndGet())
+        counter.incrementAndGet()
     }
 
     def printCounter(): Unit = {

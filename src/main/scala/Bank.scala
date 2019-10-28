@@ -20,7 +20,7 @@ class Bank(val allowedAttempts: Integer = 3) {
         thread.start()
     }
 
-    // TOO
+    // TODO
     // project task 2
     // Function that pops a transaction from the queue
     // and spawns a thread to execute the transaction.
@@ -31,15 +31,21 @@ class Bank(val allowedAttempts: Integer = 3) {
 
         val thread = new Thread(transaction)
         thread.start()
-    }
+        thread.wait(2)
 
-    private def processPendingTransaction(transaction: Transaction) {
-        transactionsQueue.push(transaction)
-        processTransactions
-    }
+        if (transaction.status == TransactionStatus.PENDING) {
+            transactionsQueue.push(transaction)
 
-    private def pushToCompleted(transaction: Transaction) {
-        processedTransactions.push(transaction)
+            if (!processedTransactions.isEmpty) {
+                processedTransactions
+            }
+
+        } else {
+            processedTransactions.push(transaction)
+        }
+
+
+
     }
 
     def addAccount(initialBalance: Double) = new Account(this, initialBalance)

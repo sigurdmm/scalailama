@@ -39,4 +39,7 @@ object Task2 {
     def printCounter(): Unit = {
         println(counter)
     }
+
+    // Task 2d)
+    // TODO: Write concurrency deadlock example
 }

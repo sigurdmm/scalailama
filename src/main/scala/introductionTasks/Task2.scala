@@ -63,8 +63,8 @@ object Task2 {
     object Scenario2 {
         def run = {
             val result = Future.sequence(Seq(
-                Future { A.start },                        // (1)
-                Future { B.step }                          // (2)
+                Future { A.start },                        
+                Future { B.step }
             ))
             Await.result(result, 1.minute)
         }

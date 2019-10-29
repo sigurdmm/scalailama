@@ -57,7 +57,6 @@ object Task1 {
     sumRecursivelyInternal(numbers, 0)
   }
 
-  // TODO: Answer theory question: Use BigInt instead of Int. What is the difference between these two data types?
   def nthFibonacci(n: BigInt): BigInt = {
     @scala.annotation.tailrec
     def nthFibonacciInternal(n: BigInt, a: BigInt, b: BigInt):BigInt = {

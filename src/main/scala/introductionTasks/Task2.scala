@@ -1,6 +1,11 @@
 package introductionTasks
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent._
+import scala.concurrent.duration._
 import java.util.concurrent.atomic.AtomicInteger
+
+import scala.concurrent.Future
 
 object Task2 {
     def main(args: Array[String]) = {
@@ -41,5 +46,27 @@ object Task2 {
     }
 
     // Task 2d)
-    // TODO: Write concurrency deadlock example
+    /**
+     * Here is an example of deadlock between the two objects. With A depending on the step value in B and the step
+     * value in B depending on the start value in A, the dependencies makes such that we have a deadlock.
+     */
+
+    object A {
+        lazy val base = 42
+        lazy val start = B.step
+    }
+
+    object B {
+        lazy val step = A.base
+    }
+
+    object Scenario2 {
+        def run = {
+            val result = Future.sequence(Seq(
+                Future { A.start },                        // (1)
+                Future { B.step }                          // (2)
+            ))
+            Await.result(result, 1.minute)
+        }
+    }
 }

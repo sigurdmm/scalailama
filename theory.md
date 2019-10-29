@@ -15,5 +15,11 @@ The phenomenon is called _Race condition_ which the output of a concurrent progr
 One example where the race condition phenomenon is problematic is where one thread is depending on a result from another thread.
 
 ## Task 2d
-Deadlock is when you have concurrent operations that have become stuck. An example of this is when you have two threads that depends on the result of each other so none may continue.
-One way to prevent deadlock in concurrency is to have a timeout. This way, if two transactions are stuck because of each other, one of them may cancel and restart which will remove the deadlock.
+Deadlock is when you have two processes x and y where x is waiting for y to finish and vice versa. In this case, both processes will run in an endless loop.
+If one is only using pure functions, which does not contain any side effects and furthermore be deadlock safe.
+Other methods that will prevent deadlock:
+- lock timeouts
+- lock ordering, if done correctly
+- deadlock detection
+
+

@@ -13,7 +13,7 @@ class Bank(val allowedAttempts: Integer = 3) {
 
         val thread = new Thread {
             override def run() {
-                processedTransactions
+                processTransactions
             }
         }
 

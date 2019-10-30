@@ -46,23 +46,36 @@ class Transaction(val transactionsQueue: TransactionQueue,
   var status: TransactionStatus.Value = TransactionStatus.PENDING
   var attempt = 0
 
-  override def run: Unit = {
+  override def run(): Unit = {
 
-      def doTransaction() = {
+      def doTransaction(): Unit = {
           // TODO - project task 3
           // Extend this method to satisfy requirements.
-          from withdraw amount
-          to deposit amount
+          this.status = from.withdraw(amount)
+              .fold( _ => to.deposit(amount), error => Right(error))
+              .fold(_ => TransactionStatus.SUCCESS , _ => TransactionStatus.PENDING)
+//          val attemptWithdraw = from.withdraw(amount)
+//          if(attemptWithdraw.isRight){
+//              val attemptDeposit = to.deposit(amount)
+//              if(!attemptDeposit.isRight){
+//                  from.deposit(amount)
+//                  status = TransactionStatus.FAILED
+//              }
+//              else status = TransactionStatus.SUCCESS
+//          }
       }
+
 
       // TODO - project task 3
       // make the code below thread safe
-      if (status == TransactionStatus.PENDING) {
-          doTransaction
+      while (this.status == TransactionStatus.PENDING) {
+          this.attempt += 1
+          if (attempt > allowedAttemps) {
+              this.status = TransactionStatus.FAILED
+          }
+          doTransaction()
           Thread.sleep(50) // you might want this to make more room for
                            // new transactions to be added to the queue
       }
-
-
     }
 }

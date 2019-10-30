@@ -37,7 +37,7 @@ class Transaction(val transactionsQueue: TransactionQueue,
                   val from: Account,
                   val to: Account,
                   val amount: Double,
-                  val allowedAttemps: Int) extends Runnable {
+                  val allowedAttempts: Int) extends Runnable {
 
   var status: TransactionStatus.Value = TransactionStatus.PENDING
   var attempt = 0
@@ -55,7 +55,7 @@ class Transaction(val transactionsQueue: TransactionQueue,
 
       // TODO - project task 3
       // make the code below thread safe
-      if (this.status == TransactionStatus.PENDING && this.attempt < this.allowedAttemps) {
+      if (this.status == TransactionStatus.PENDING && this.attempt < this.allowedAttempts) {
           this.attempt += 1
 
           doTransaction

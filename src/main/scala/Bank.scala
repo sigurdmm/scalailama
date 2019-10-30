@@ -31,26 +31,18 @@ class Bank(val allowedAttempts: Integer = 3) {
 
         val thread = new Thread(transaction)
         thread.start()
-        thread.wait(2)
+        thread.join(10000) // prevents infinite stall by timing out after 10 seconds
 
         if (transaction.status == TransactionStatus.PENDING) {
             transactionsQueue.push(transaction)
-
-            if (!processedTransactions.isEmpty) {
-                processedTransactions
-            }
-
+            processTransactions
         } else {
             processedTransactions.push(transaction)
         }
-
-
 
     }
 
     def addAccount(initialBalance: Double) = new Account(this, initialBalance)
 
     def getProcessedTransactionsAsList = processedTransactions.iterator.toList
-    
-
 }

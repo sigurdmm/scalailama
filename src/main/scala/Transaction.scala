@@ -1,10 +1,6 @@
 import java.util.concurrent.{BlockingQueue, LinkedBlockingQueue}
-import collection.JavaConverters.asScalaIterator
 
-//sealed trait TransactionStatus
-//case object SUCCESS extends TransactionStatus
-//case object PENDING extends TransactionStatus
-//case object FAILED extends TransactionStatus
+import collection.JavaConverters.asScalaIterator
 
 object TransactionStatus extends Enumeration {
   val SUCCESS, PENDING, FAILED = Value
@@ -46,36 +42,27 @@ class Transaction(val transactionsQueue: TransactionQueue,
   var status: TransactionStatus.Value = TransactionStatus.PENDING
   var attempt = 0
 
-  override def run(): Unit = {
+  override def run(): Unit = this.synchronized {
 
       def doTransaction(): Unit = {
           // TODO - project task 3
           // Extend this method to satisfy requirements.
-          this.status = from.withdraw(amount)
-              .fold( _ => to.deposit(amount), error => Right(error))
-              .fold(_ => TransactionStatus.SUCCESS , _ => TransactionStatus.PENDING)
-//          val attemptWithdraw = from.withdraw(amount)
-//          if(attemptWithdraw.isRight){
-//              val attemptDeposit = to.deposit(amount)
-//              if(!attemptDeposit.isRight){
-//                  from.deposit(amount)
-//                  status = TransactionStatus.FAILED
-//              }
-//              else status = TransactionStatus.SUCCESS
-//          }
+          this.from
+              .withdraw(amount)
+              .fold(_ => this.to.deposit(amount),_ => Right()) // Error handling done elsewhere
+              .fold(_ => this.status = TransactionStatus.SUCCESS, _ => Right()) // Error handling done elsewhere
       }
-
 
       // TODO - project task 3
       // make the code below thread safe
-      while (this.status == TransactionStatus.PENDING) {
+      if (this.status == TransactionStatus.PENDING && this.attempt < this.allowedAttemps) {
           this.attempt += 1
-          if (attempt > allowedAttemps) {
-              this.status = TransactionStatus.FAILED
-          }
-          doTransaction()
-          Thread.sleep(50) // you might want this to make more room for
-                           // new transactions to be added to the queue
+
+          doTransaction
+          Thread.sleep(50)   // you might want this to make more room for
+                                    // new transactions to be added to the queue
+      } else {
+          this.status = TransactionStatus.FAILED
       }
     }
 }
